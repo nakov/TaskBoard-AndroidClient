@@ -82,6 +82,7 @@
             android:paddingTop="5dp"
             android:paddingEnd="8dp"
             android:paddingBottom="5dp"
+            android:textColor="@color/foregroundStatus"
             android:textSize="18sp" />
 
         <androidx.recyclerview.widget.RecyclerView
