@@ -13,10 +13,10 @@ public interface TaskBoardAPI {
     Call<List<Task>> getTasks();
 
     @GET("tasks/{id}")
-    Call<Task> findContactById(@Path("id") int id);
+    Call<Task> findTaskById(@Path("id") int id);
 
     @GET("tasks/search/{keyword}")
-    Call<List<Task>> findContactsByKeyword(@Path("keyword") String keyword);
+    Call<List<Task>> findTaskByKeyword(@Path("keyword") String keyword);
 
     @POST("tasks")
     Call<TaskReponse> create(@Body Task task);

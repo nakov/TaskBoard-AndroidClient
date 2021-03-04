@@ -76,32 +76,36 @@ public class ActivityTasks extends AppCompatActivity {
 
     private void searchTasksByKeyword(String keyword) {
         showStatusMsg("Loading tasks ...");
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(this.apiBaseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        TaskBoardAPI service = retrofit.create(TaskBoardAPI.class);
+        try {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(this.apiBaseUrl)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            TaskBoardAPI service = retrofit.create(TaskBoardAPI.class);
 
-        Call<List<Task>> request;
-        if (keyword.length() > 0)
-            request = service.findContactsByKeyword(keyword);
-        else
-            request = service.getTasks();
-        request.enqueue(new Callback<List<Task>>() {
-            @Override
-            public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
-                if (response.code() != HttpURLConnection.HTTP_OK) {
-                    showErrorMsg("HTTP code: " + response.code());
-                    return;
+            Call<List<Task>> request;
+            if (keyword.length() > 0)
+                request = service.findTaskByKeyword(keyword);
+            else
+                request = service.getTasks();
+            request.enqueue(new Callback<List<Task>>() {
+                @Override
+                public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
+                    if (response.code() != HttpURLConnection.HTTP_OK) {
+                        showErrorMsg("Error. HTTP code: " + response.code());
+                        return;
+                    }
+                    displayTasks(response.body());
                 }
-                displayTasks(response.body());
-            }
 
-            @Override
-            public void onFailure(Call<List<Task>> call, Throwable t) {
-                showErrorMsg(t.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(Call<List<Task>> call, Throwable t) {
+                    showErrorMsg(t.getMessage());
+                }
+            });
+        } catch (Throwable t) {
+            showErrorMsg(t.getMessage());
+        }
     }
 
     private void displayTasks(List<Task> tasks) {
@@ -130,31 +134,35 @@ public class ActivityTasks extends AppCompatActivity {
 
     private void CreateNewTask(String title, String description) {
         showStatusMsg("Creating new task ...");
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(this.apiBaseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        TaskBoardAPI service = retrofit.create(TaskBoardAPI.class);
+        try {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(this.apiBaseUrl)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            TaskBoardAPI service = retrofit.create(TaskBoardAPI.class);
 
-        Task task = new Task();
-        task.setTitle(title);
-        task.setDescription(description);
-        Call<TaskReponse> request = service.create(task);
-        request.enqueue(new Callback<TaskReponse>() {
-            @Override
-            public void onResponse(Call<TaskReponse> call, Response<TaskReponse> response) {
-                if (response.code() != HttpURLConnection.HTTP_CREATED) {
-                    showErrorMsg("HTTP code: " + response.code());
-                    return;
+            Task task = new Task();
+            task.setTitle(title);
+            task.setDescription(description);
+            Call<TaskReponse> request = service.create(task);
+            request.enqueue(new Callback<TaskReponse>() {
+                @Override
+                public void onResponse(Call<TaskReponse> call, Response<TaskReponse> response) {
+                    if (response.code() != HttpURLConnection.HTTP_CREATED) {
+                        showErrorMsg("Error. HTTP code: " + response.code());
+                        return;
+                    }
+                    showSuccessMsg("Task #" + response.body().getTask().getId() + " created.");
                 }
-                showSuccessMsg("Task #" + response.body().getTask().getId() + " created.");
-            }
 
-            @Override
-            public void onFailure(Call<TaskReponse> call, Throwable t) {
-                showErrorMsg(t.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(Call<TaskReponse> call, Throwable t) {
+                    showErrorMsg(t.getMessage());
+                }
+            });
+        } catch (Throwable t) {
+            showErrorMsg(t.getMessage());
+        }
     }
 
     private void showStatusMsg(String msg) {
