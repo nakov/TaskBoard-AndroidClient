@@ -19,3 +19,5 @@ About TaskBoard:
 ![image](https://user-images.githubusercontent.com/1689586/110037927-c10df700-7d47-11eb-9770-7e8018c09aac.png)
 
 ![image](https://user-images.githubusercontent.com/1689586/110037983-d2ef9a00-7d47-11eb-8523-3d33e8cffd0c.png)
+
+![image](https://user-images.githubusercontent.com/1689586/110086241-ccd6d900-7d9a-11eb-99cb-c32dfc6d9319.png)
